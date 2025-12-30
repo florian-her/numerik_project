@@ -88,7 +88,16 @@ Um Konflikte zu vermeiden und den Code sauber zu halten, habe ich die physikalis
 &nbsp;   \* Führt die \*\*numerische Integration\*\* (Trapezregel) der Leistung von Sonnenaufgang bis -untergang durch.
 
 
+6\. \*\*`test_solar_basic.m` by Simen\*\*
 
+Dieses Skript führt automatisch folgende Checks durch:
+1.  **Konfigurations-Check:** Wurden Ort und Breite korrekt geladen?
+2.  **Vektor-Check:** Ist der Sonnenvektor $\vec{s}$ immer ein Einheitsvektor (Länge 1)?
+3.  **Plausibilitäts-Check:** Stimmen Taglängen und Sonnenhöhen für Sommer (21. Juni) und Winter (21. Dez) mit der Realität überein?
+4.  **Integrations-Check:** Liefert `calcDailyEnergy` realistische kWh-Werte (> 0)?
+
+**Wie man es benutzt:**
+Einfach `test_solar_basics` in das MATLAB Command Window eingeben und Enter drücken. Wenn keine `[FEHLER]` oder `Warning` angezeigt werden, ist das Modell stabil.
 ---
 
 
