@@ -1,0 +1,18 @@
+# MATLAB-spezifische temporäre Dateien
+*.asv
+*.slxc
+*.mex*
+*.log
+
+# Simulink Generate Code & Cache
+slprj/
+*_ert_rtw/
+*_grt_rtw/
+
+# MATLAB Project Ressourcen (lokale Einstellungen)
+resources/project/
+work/
+
+# Falls du keine großen Datensätze hochladen willst
+*.mat
+*.dat
