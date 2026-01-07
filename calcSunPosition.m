@@ -18,6 +18,8 @@ function [s_vec, alpha_deg, alpha_Z_deg] = calcSunPosition(doy, time_h, conf)
     
     %% 3. Höhenwinkel (alpha)
     sin_alpha = sin(conf.phi) * sin(delta) + cos(conf.phi) * cos(delta) * cos(H);
+    % Auf gültigen Bereich begrenzen wegen numerischer Ungenauigkeiten
+    sin_alpha = max(-1, min(1, sin_alpha));
     alpha = asin(sin_alpha); % Ergebnis in Radiant
     alpha_deg = alpha * conf.rad2deg;
     
