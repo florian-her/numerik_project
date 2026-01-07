@@ -8,8 +8,8 @@ Dieses Repository enthält die numerische Simulation zur Berechnung und Optimier
 
 **Stand: Phase 1 (Modellierung & Grundlagen)**
 
-* **Aktueller Branch:** `feature/solar-model`
-* **WICHTIG:** In der Aufgabenstellung fehlt die Angabe des Breitengrades ($\phi$). Ich habe in `getSolarConfig.m` vorerst **50.0° N** (ca. Mainz/Frankfurt) als Platzhalter gesetzt. Wahrscheinlich Innsbruck dann später anpassen in der Config!
+* **Aktueller Branch:** `feature/readme`
+* **WICHTIG:** In der `getSolarConfig.m` vorerst **47.26° N** (ca. Innsbruck) als Platzhalter gesetzt. Könnte dann später in der Config angepasst werden.
 * **Koordinatensystem:** Wir nutzen ein rechtshändiges System:
   * $x$ = Nord ($0^\circ$)
   * $y$ = Ost ($90^\circ$)
@@ -49,10 +49,11 @@ Um Konflikte zu vermeiden und den Code sauber zu halten, habe ich die physikalis
 
 6. **`test_solar_basic.m` by Simen**
    Dieses Skript führt automatisch folgende Checks durch:
-   1. **Konfigurations-Check:** Wurden Ort und Breite korrekt geladen?
-   2. **Vektor-Check:** Ist der Sonnenvektor $\vec{s}$ immer ein Einheitsvektor (Länge 1)?
-   3. **Plausibilitäts-Check:** Stimmen Taglängen und Sonnenhöhen für Sommer (21. Juni) und Winter (21. Dez) mit der Realität überein?
-   4. **Integrations-Check:** Liefert `calcDailyEnergy` realistische kWh-Werte (> 0)?
+    *Konfigurations-Check: Wurden Ort und Breite korrekt geladen?
+    *Vektor-Check: ist der Sonnenvektor $\vec{s}$ immer ein Einheitsvektor (Länge 1)?
+    *Plausibilitäts-Check: Stimmen Taglängen und Sonnenhöhen für Sommer (21. Juni) und Winter (21. Dez) mit der Realität überein?
+    *Integrations-Check: Liefert `calcDailyEnergy` realistische kWh-Werte (> 0)?
+
 
    **Wie man es benutzt:**
    Einfach `test_solar_basics` in das MATLAB Command Window eingeben und Enter drücken. Wenn keine `[FEHLER]` oder `Warning` angezeigt werden, ist das Modell stabil.
@@ -72,4 +73,4 @@ Um Konflikte zu vermeiden und den Code sauber zu halten, habe ich die physikalis
 Bitte arbeitet nicht direkt auf `main`. Erstellt für neue Aufgaben einen eigenen Branch:
 `git checkout -b feature/euer-feature-name`
 
-## README zuletzt bearbeitet: Florian
+## README zuletzt bearbeitet: Simen
