@@ -54,10 +54,6 @@ Um Konflikte zu vermeiden und den Code sauber zu halten, habe ich die physikalis
     * Plausibilitäts-Check: Stimmen Taglängen und Sonnenhöhen für Sommer (21. Juni) und Winter (21. Dez) mit der Realität überein?
     * Integrations-Check: Liefert `calcDailyEnergy` realistische kWh-Werte (> 0)?
 
-
-**Wie man es benutzt:**
-   Einfach `test_solar_basics` in das MATLAB Command Window eingeben und Enter drücken. Wenn keine `[FEHLER]` oder `Warning` angezeigt werden, ist das Modell stabil.
-
 7. **`Taglaenge` by Florian**
    Dieses Skript visualisiert die saisonalen Schwankungen der Tageslänge für einen spezifischen Standort:
       * Konfigurations-Initialisierung: Lädt die geografischen Parameter (z. B. für Innsbruck) über die Funktion getSolarConfig().
@@ -86,8 +82,16 @@ Um Konflikte zu vermeiden und den Code sauber zu halten, habe ich die physikalis
    * Vergleichsanalyse: Berechnet das Verhältnis (Faktor) zwischen vertikalem und horizontalem Ertrag, um die Effizienz verschiedener Gebäudekonzeptionen zu bewerten.
    * Ergebnisausgabe: Präsentiert die Jahressummen in der Einheit $kWh/m^2$, was als Grundlage für wirtschaftliche Ertragsprognosen dient.
 
+11. **`TaskOptimierung` by Florian**
+   Dieses Skript führt eine automatisierte Suche nach der energetisch idealen Ausrichtung der Solarpanels durch, um das Maximum der einfallenden Strahlungsenergie zu finden:
+      * Algorithmische Optimierung: Nutzt die MATLAB-Funktion fminsearch, um durch Minimierung der negierten Tagesenergie den optimalen Azimut- und Neigungswinkel zu identifizieren.
+      * Stichtags- & Ganzjahresanalyse: Berechnet die ideale Ausrichtung sowohl für die vier spezifischen Tage der Sonnenwenden und Tag-und-Nacht-Gleichen als auch für den kumulierten Ertrag über das gesamte Jahr.
+      * Relativer Performance-Vergleich: Setzt die optimierten Ergebnisse in Relation zu einer horizontalen Referenzanlage ($0^\circ$ Neigung), um den prozentualen Verbesserungsfaktor zu quantifizieren.
+      * Ergebnisausgabe: Präsentiert die berechneten Idealwinkel (Azimut und Tilt in $^\circ$) sowie die maximal erreichbare Energie in $kWh/m^2$ in einer übersichtlichen Tabelle.
 
 
+**Wie man es benutzt:**
+   Einfach `test_solar_basics` in das MATLAB Command Window eingeben und Enter drücken. Wenn keine `[FEHLER]` oder `Warning` angezeigt werden, ist das Modell stabil.
 
 ## Workplan & Nächste Schritte
 
@@ -101,4 +105,6 @@ Um Konflikte zu vermeiden und den Code sauber zu halten, habe ich die physikalis
 Bitte arbeitet nicht direkt auf `main`. Erstellt für neue Aufgaben einen eigenen Branch:
 `git checkout -b feature/euer-feature-name`
 
-## README zuletzt bearbeitet: Simen
+## README zuletzt bearbeitet: 
+- Simen
+- Florian 7.1. 17.30
