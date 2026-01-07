@@ -1,20 +1,14 @@
 clear; clc;
-conf = getSolarConfig();
+conf = getSolarConfig(); %
 
-E_horiz_total = 0;
-E_vert_total = 0;
+% Alle Tage des Jahres als Vektor definieren
+days = 1:365;
 
-fprintf('Berechne Jahressummen (365 Tage)... Dies kann einen Moment dauern.\n');
+% Jahressumme Horizontal: Berechne für jeden Tag und summiere [cite: 31]
+E_horiz_total = sum(arrayfun(@(d) calcDailyEnergy(d, 180, 0, conf), days));
 
-for doy = 1:365
-    E_horiz_total = E_horiz_total + calcDailyEnergy(doy, 180, 0, conf);
-    
-    E_vert_total = E_vert_total + calcDailyEnergy(doy, 180, 90, conf);
-end
+% Jahressumme Vertikal Süd: [cite: 35]
+E_vert_total = sum(arrayfun(@(d) calcDailyEnergy(d, 180, 90, conf), days));
 
-faktor_v_h = E_vert_total / E_horiz_total;
-
-fprintf('\n--- JAHRESSUMMEN (Innsbruck) ---\n');
-fprintf('Gesamtenergie Horizontal: %.2f kWh/m^2 pro Jahr\n', E_horiz_total);
-fprintf('Gesamtenergie Vertikal Sued: %.2f kWh/m^2 pro Jahr\n', E_vert_total);
-fprintf('Die vertikale Anlage liefert das %.2f-fache der horizontalen.\n', faktor_v_h);
+fprintf('--- JAHRESSUMMEN (Schleifenfrei) ---\n');
+fprintf('Horizontal: %.2f kWh/m^2 | Vertikal: %.2f kWh/m^2\n', E_horiz_total, E_vert_total);

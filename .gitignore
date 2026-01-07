@@ -16,3 +16,6 @@ work/
 # Falls du keine großen Datensätze hochladen willst
 *.mat
 *.dat
+.aider*
+.env
+Aufgabe.md
