@@ -1,8 +1,8 @@
 function conf = getSolarConfig()
     % GETSOLARCONFIG Einstellungen basierend auf Aufgabenstellung
     
-    %% 1. Standort WICHTIG: bitte festlegen!
-    conf.phi_deg = 50.0;  % Beispiel: 50 Grad Nord
+    %% 1. Standort 
+    conf.phi_deg = 47.26; %%auf Innsbruck gelegt
                           
     
     %% 2. Konstanten
