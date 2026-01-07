@@ -57,32 +57,14 @@ Um Konflikte zu vermeiden und den Code sauber zu halten, habe ich die physikalis
    **Wie man es benutzt:**
    Einfach `test_solar_basics` in das MATLAB Command Window eingeben und Enter drücken. Wenn keine `[FEHLER]` oder `Warning` angezeigt werden, ist das Modell stabil.
 
----
 
-## Nutzung (Beispiel)
 
-Um die Tagesenergie für einen bestimmten Tag und eine Ausrichtung zu berechnen:
-
-```matlab
-% 1. Konfiguration laden
-conf = getSolarConfig();
-
-% 2. Parameter definieren
-doy = 172;          % 21. Juni (Tag des Jahres)
-azimuth = 180;      % Ausrichtung nach Süden
-tilt = 90;          % Vertikale Anlage (Fassade)
-
-% 3. Energie berechnen
-E_total = calcDailyEnergy(doy, azimuth, tilt, conf);
-
-fprintf('Tagesenergie: %.2f kWh/m²\n', E_total);
-```
 
 ## Workplan & Nächste Schritte
 
 - [x] Phase 1: Physikalisches Modell & Hilfsfunktionen implementiert (`feature/solar-basics`).
-- [ ] Phase 2: Berechnung der Szenarien aus der Aufgabe (Horizontale/Vertikale Anlage für März, Juni, Sept, Dez). -> *To Do: Skript erstellen.*
-- [ ] Phase 3: Diagramm der Taglängen erstellen.
+- [x] Phase 2: Berechnung der Szenarien aus der Aufgabe (Horizontale/Vertikale Anlage für März, Juni, Sept, Dez). -> *To Do: Skript erstellen.*
+- [x] Phase 3: Diagramm der Taglängen erstellen.
 - [ ] Phase 4: Optimierung (Finde optimale Winkel $\alpha, \beta$ für das Jahr). -> *Hierfür nutzen wir später `fminsearch` mit `calcDailyEnergy` als Zielfunktion.*
 
 ## Git Workflow
@@ -90,4 +72,4 @@ fprintf('Tagesenergie: %.2f kWh/m²\n', E_total);
 Bitte arbeitet nicht direkt auf `main`. Erstellt für neue Aufgaben einen eigenen Branch:
 `git checkout -b feature/euer-feature-name`
 
-## README zuletzt bearbeitet: Simen
+## README zuletzt bearbeitet: Florian
