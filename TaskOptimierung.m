@@ -47,6 +47,11 @@ fprintf('\nBerechne optimale Jahresausrichtung (Bitte warten...)\n');
 fprintf('\nOPTIMALE JAHRESAUSRICHTUNG:\n');
 fprintf('Azimut: %.2f°, Neigung: %.2f°, Energie: %.2f kWh/m^2\n', x_year(1), x_year(2), -fval_year);
 
+%% SPEICHERN DER ERGEBNISSE
+% Wir speichern den optimalen Winkel (Vergleich) ihn nutzen können, ohne neu zu rechnen.
+save('results_opt.mat', 'x_year'); 
+fprintf('Ergebniswurde in "results_opt.mat" gespeichert.\n');
+
 %% LOKALE FUNKTIOMEN
 
 function cache = createDayCache(doy, conf)

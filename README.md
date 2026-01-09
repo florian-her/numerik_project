@@ -2,9 +2,13 @@
 
 Dieses Repository enthält die numerische Simulation zur Berechnung und Optimierung der Energieausbeute einer PV-Anlage.
 
-## AKTUELLE WICHTIGE KOMMENTARE (Bitte lesen!)
+## AKTUELLE WICHTIGE KOMMENTARE ToDo!!!
 
-* Ich habe so angefangen, aber meine mich zu erinnern, dass er meinte, dass wir das erst Analytisch (Händisch) lösen müssen. Müssen wir nochmal drüber reden.
+* TaskOptimierung-> Vergleich fixiert übers Jahr mit flach hinzufügen
+* TaskTracking-> auskommentieren (macht Simen)
+* Strompreise einbinden, passende Aufgabe überlegen-> Wieviel Geld verdienen womit; optimale Fixierte Einstellung für maximales Geld; Optimale Nutzung, bei verkauf und eigennutzung(Werte für durchschnittsverbrauch raussuchen)
+* Dokumentation und README ausarbeiten
+* Evtl. möglich: die gefragten 4 Tage auch zentral in die Config oä. speichern zum einfachen bearbeiten
 
 **Stand: Phase 1 (Modellierung & Grundlagen)**
 
