@@ -93,23 +93,22 @@ Um Konflikte zu vermeiden und den Code sauber zu halten, habe ich die physikalis
       * Relativer Performance-Vergleich: Setzt die optimierten Ergebnisse in Relation zu einer horizontalen Referenzanlage ($0^\circ$ Neigung), um den prozentualen Verbesserungsfaktor zu quantifizieren.
       * Ergebnisausgabe: Präsentiert die berechneten Idealwinkel (Azimut und Tilt in $^\circ$) sowie die maximal erreichbare Energie in $kWh/m^2$ in einer übersichtlichen Tabelle.
 
-12. **'TaskVergleichKomplett' by Simen
-	Dieses Skript realisiert die Aufgaben zur nachgeführten Anlage und stellt alle Szenarien gegenüber:
-    *Szenarien: Vergleicht vier Montagearten:
+12. **`TaskVergleichKomplett` by Simen**
+	Dieses Skript realisiert die Aufgaben zur nachgeführten Anlage und stellt alle Szenarien gegenüber. Vergleicht vier Montagearten:
 
-        Horizontal (Flach).
+        * Horizontal (Flach).
 
-        Optimal Fixiert (Nutzt die berechneten Winkel aus TaskOptimierung via .mat-Import).
+        * Optimal Fixiert (Nutzt die berechneten Winkel aus TaskOptimierung via .mat-Import).
 
-        1-Achsiges Tracking (Azimut folgt der Sonne, Neigung fixiert auf Jahres-Optimum).
+        * 1-Achsiges Tracking (Azimut folgt der Sonne, Neigung fixiert auf Jahres-Optimum).
 
-        2-Achsiges Tracking (Panel immer senkrecht zur Sonne, theoretisches Maximum).
+        * 2-Achsiges Tracking (Panel immer senkrecht zur Sonne, theoretisches Maximum).
 
-    *Auswertung: Berechnet Tageserträge (kWh) und Jahressummen.
+    * Auswertung: Berechnet Tageserträge (kWh) und Jahressummen.
 
-    *Ergebnis: Gibt Tabellen aus, die sowohl die absoluten Erträge als auch die prozentuale Verbesserung gegenüber der flachen Anlage zeigen.
+    * Ergebnis: Gibt Tabellen aus, die sowohl die absoluten Erträge als auch die prozentuale Verbesserung gegenüber der flachen Anlage zeigen.
 
-*Technik: Nutzt Vektorisierung und Pre-Caching für maximale Rechengeschwindigkeit ohne for-Schleifen
+* Technik: Nutzt Vektorisierung und Pre-Caching für maximale Rechengeschwindigkeit ohne for-Schleifen
 
 
 **Wie man es benutzt:**
