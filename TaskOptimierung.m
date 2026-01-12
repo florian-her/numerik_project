@@ -53,6 +53,11 @@ Tabelle_Jahresvergleich = table(Variante, Azimut, Tilt, kWh_pro_Jahr)
 
 fprintf('Zusätzlicher Ertrag durch Optimierung: %.2f %%\n', improvement_annual);
 
+%% SPEICHERN DER ERGEBNISSE
+% Wir speichern den optimalen Winkel (Vergleich) ihn nutzen können, ohne neu zu rechnen.
+save('results_opt.mat', 'x_year'); 
+fprintf('Ergebniswurde in "results_opt.mat" gespeichert.\n');
+
 function cache = createDayCache(doy, conf)
     [t_rise, t_set, ~] = calcDayLength(doy, conf);
     if t_set <= t_rise
