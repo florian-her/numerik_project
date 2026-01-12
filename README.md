@@ -53,58 +53,56 @@ Um Konflikte zu vermeiden und den Code sauber zu halten, habe ich die physikalis
 
 6. **`test_solar_basic.m` by Simen**
    * Dieses Skript führt automatisch folgende Checks durch:
-    * Konfigurations-Check: Wurden Ort und Breite korrekt geladen?
-    * Vektor-Check: ist der Sonnenvektor $\vec{s}$ immer ein Einheitsvektor (Länge 1)?
-    * Plausibilitäts-Check: Stimmen Taglängen und Sonnenhöhen für Sommer (21. Juni) und Winter (21. Dez) mit der Realität überein?
-    * Integrations-Check: Liefert `calcDailyEnergy` realistische kWh-Werte (> 0)?
+		* Konfigurations-Check: Wurden Ort und Breite korrekt geladen?
+    	* Vektor-Check: ist der Sonnenvektor $\vec{s}$ immer ein Einheitsvektor (Länge 1)?
+    	* Plausibilitäts-Check: Stimmen Taglängen und Sonnenhöhen für Sommer (21. Juni) und Winter (21. Dez) mit der Realität überein?
+    	* Integrations-Check: Liefert `calcDailyEnergy` realistische kWh-Werte (> 0)?
 
 7. **`Taglaenge` by Florian**
    * Dieses Skript visualisiert die saisonalen Schwankungen der Tageslänge für einen spezifischen Standort:
-      * Konfigurations-Initialisierung: Lädt die geografischen Parameter (z. B. für Innsbruck) über die Funktion getSolarConfig().
-      * Jahresverlauf-Berechnung: Durchläuft alle 365 Tage des Jahres und berechnet mittels calcDayLength die jeweilige Tagesdauer.
-      * Grafische Auswertung: Erstellt ein Diagramm, das die Änderung der Sonnenstunden über den Jahresverlauf (doy 1 bis 365) darstellt.
-      * Plausibilitäts-Check: Gibt die exakte berechnete Tageslänge für den 21. Juni (Sommeranfang) zur Kontrolle im Command Window aus.
+		* Konfigurations-Initialisierung: Lädt die geografischen Parameter (z. B. für Innsbruck) über die Funktion getSolarConfig().
+    	* Jahresverlauf-Berechnung: Durchläuft alle 365 Tage des Jahres und berechnet mittels calcDayLength die jeweilige Tagesdauer.
+    	* Grafische Auswertung: Erstellt ein Diagramm, das die Änderung der Sonnenstunden über den Jahresverlauf (doy 1 bis 365) darstellt.
+    	* Plausibilitäts-Check: Gibt die exakte berechnete Tageslänge für den 21. Juni (Sommeranfang) zur Kontrolle im Command Window aus.
 
 8. **`TaskVektorCheck` by Florian**
    * Dieses Skript dient der mathematischen Überprüfung der berechneten Sonnengeometrie:
-	   * Berechnung der Sonnenposition: Ermittelt den Sonnenvektor $\vec{s}$ und die Sonnenhöhe $\alpha$ für einen spezifischen Testzeitpunkt (Sommersonnenwende, 12:00 Uhr).
-	   * Vektor-Validierung: Berechnet die mathematische Norm (Länge) des resultierenden Richtungsvektors mithilfe der Funktion norm(s_vec).
-	   * Einheitsvektor-Check: Verifiziert, ob die Länge des Vektors exakt $1.0$ beträgt, um sicherzustellen, dass es sich um einen korrekten Einheitsvektor handelt.
-	   * Ergebniskontrolle: Gibt die einzelnen Vektorkomponenten sowie die Sonnenhöhe im Command Window aus, um die Plausibilität der Berechnungen (Aufgabe 26) zu bestätigen.
+		* Berechnung der Sonnenposition: Ermittelt den Sonnenvektor $\vec{s}$ und die Sonnenhöhe $\alpha$ für einen spezifischen Testzeitpunkt (Sommersonnenwende, 12:00 Uhr).
+		* Vektor-Validierung: Berechnet die mathematische Norm (Länge) des resultierenden Richtungsvektors mithilfe der Funktion norm(s_vec).
+		* Einheitsvektor-Check: Verifiziert, ob die Länge des Vektors exakt $1.0$ beträgt, um sicherzustellen, dass es sich um einen korrekten Einheitsvektor handelt.
+		* Ergebniskontrolle: Gibt die einzelnen Vektorkomponenten sowie die Sonnenhöhe im Command Window aus, um die Plausibilität der Berechnungen (Aufgabe 26) zu bestätigen.
 
 9. **`TaskTagesSumme` by Florian**
    * Dieses Skript berechnet und vergleicht die täglichen Energieerträge für verschiedene Modulausrichtungen zu den astronomischen Eckpunkten des Jahres:
-      * Saisonale Analyse: Führt Berechnungen für die Tag-und-Nacht-Gleichen sowie die Sonnenwenden durch (21. März, Juni, September und Dezember).
-      * Vergleich von Neigungswinkeln: Berechnet die tägliche Energie mittels calcDailyEnergy sowohl für eine horizontale Fläche ($0^\circ$ Neigung) als auch für eine vertikale Südfassade ($90^\circ$ Neigung).
-      * Systematische Datenerfassung: Durchläuft die Testtage in einer Schleife und speichert die resultierenden Energiewerte strukturiert in einer Ergebnismatrix.
-      * Tabellarische Aufbereitung: Erzeugt eine übersichtliche MATLAB-table, um den Einfluss des jahreszeitlichen Sonnenstandes auf die Energieeffizienz der verschiedenen Montagearten direkt gegenüberzustellen.
+		* Saisonale Analyse: Führt Berechnungen für die Tag-und-Nacht-Gleichen sowie die Sonnenwenden durch (21. März, Juni, September und Dezember).
+		* Vergleich von Neigungswinkeln: Berechnet die tägliche Energie mittels calcDailyEnergy sowohl für eine horizontale Fläche ($0^\circ$ Neigung) als auch für eine vertikale Südfassade ($90^\circ$ Neigung).
+		* Systematische Datenerfassung: Durchläuft die Testtage in einer Schleife und speichert die resultierenden Energiewerte strukturiert in einer Ergebnismatrix.
+		* Tabellarische Aufbereitung: Erzeugt eine übersichtliche MATLAB-table, um den Einfluss des jahreszeitlichen Sonnenstandes auf die Energieeffizienz der verschiedenen Montagearten direkt gegenüberzustellen.
 
 10. **`TaskJahressumme` by Florian**
    * Dieses Skript führt eine Langzeitsimulation durch, um die energetische Gesamtbilanz eines ganzen Jahres zu ermitteln:
-   * Ganzjahres-Simulation: Durchläuft in einer Schleife alle 365 Tage des Jahres, um die kumulierte Strahlungsenergie zu berechnen.
-   * Kumulierte Energieerträge: Summiert die täglichen Ergebnisse der Funktion calcDailyEnergy getrennt für horizontale Flächen ($0^\circ$ Neigung) und vertikale Südfassaden ($90^\circ$ Neigung) auf.
-   * Vergleichsanalyse: Berechnet das Verhältnis (Faktor) zwischen vertikalem und horizontalem Ertrag, um die Effizienz verschiedener Gebäudekonzeptionen zu bewerten.
-   * Ergebnisausgabe: Präsentiert die Jahressummen in der Einheit $kWh/m^2$, was als Grundlage für wirtschaftliche Ertragsprognosen dient.
+	   * Ganzjahres-Simulation: Durchläuft in einer Schleife alle 365 Tage des Jahres, um die kumulierte Strahlungsenergie zu berechnen.
+	   * Kumulierte Energieerträge: Summiert die täglichen Ergebnisse der Funktion calcDailyEnergy getrennt für horizontale Flächen ($0^\circ$ Neigung) und vertikale Südfassaden ($90^\circ$ Neigung) auf.
+	   * Vergleichsanalyse: Berechnet das Verhältnis (Faktor) zwischen vertikalem und horizontalem Ertrag, um die Effizienz verschiedener Gebäudekonzeptionen zu bewerten.
+	   * Ergebnisausgabe: Präsentiert die Jahressummen in der Einheit $kWh/m^2$, was als Grundlage für wirtschaftliche Ertragsprognosen dient.
 
 11. **`TaskOptimierung` by Florian**
    * Dieses Skript führt eine automatisierte Suche nach der energetisch idealen Ausrichtung der Solarpanels durch, um das Maximum der einfallenden Strahlungsenergie zu finden:
-      * Algorithmische Optimierung: Nutzt die MATLAB-Funktion fminsearch, um durch Minimierung der negierten Tagesenergie den optimalen Azimut- und Neigungswinkel zu identifizieren.
-      * Stichtags- & Ganzjahresanalyse: Berechnet die ideale Ausrichtung sowohl für die vier spezifischen Tage der Sonnenwenden und Tag-und-Nacht-Gleichen als auch für den kumulierten Ertrag über das gesamte Jahr.
-      * Relativer Performance-Vergleich: Setzt die optimierten Ergebnisse in Relation zu einer horizontalen Referenzanlage ($0^\circ$ Neigung), um den prozentualen Verbesserungsfaktor zu quantifizieren.
-      * Ergebnisausgabe: Präsentiert die berechneten Idealwinkel (Azimut und Tilt in $^\circ$) sowie die maximal erreichbare Energie in $kWh/m^2$ in einer übersichtlichen Tabelle.
+		* Algorithmische Optimierung: Nutzt die MATLAB-Funktion fminsearch, um durch Minimierung der negierten Tagesenergie den optimalen Azimut- und Neigungswinkel zu identifizieren.
+  		* Stichtags- & Ganzjahresanalyse: Berechnet die ideale Ausrichtung sowohl für die vier spezifischen Tage der Sonnenwenden und Tag-und-Nacht-Gleichen als auch für den kumulierten Ertrag über das gesamte Jahr.
+		* Relativer Performance-Vergleich: Setzt die optimierten Ergebnisse in Relation zu einer horizontalen Referenzanlage ($0^\circ$ Neigung), um den prozentualen Verbesserungsfaktor zu quantifizieren.
+  		* Ergebnisausgabe: Präsentiert die berechneten Idealwinkel (Azimut und Tilt in $^\circ$) sowie die maximal erreichbare Energie in $kWh/m^2$ in einer übersichtlichen Tabelle.
 
 12. **`TaskVergleichKomplett` by Simen**
 	* Dieses Skript realisiert die Aufgaben zur nachgeführten Anlage und stellt alle Szenarien gegenüber. Vergleicht vier Montagearten:
-        * Horizontal (Flach).
-        * Optimal Fixiert (Nutzt die berechneten Winkel aus TaskOptimierung via .mat-Import).
-        * 1-Achsiges Tracking (Azimut folgt der Sonne, Neigung fixiert auf Jahres-Optimum).
+		* Horizontal (Flach).
+		* Optimal Fixiert (Nutzt die berechneten Winkel aus TaskOptimierung via .mat-Import).
+		* 1-Achsiges Tracking (Azimut folgt der Sonne, Neigung fixiert auf Jahres-Optimum).
         * 2-Achsiges Tracking (Panel immer senkrecht zur Sonne, theoretisches Maximum).
 
-    * Auswertung: Berechnet Tageserträge (kWh) und Jahressummen.
-
-    * Ergebnis: Gibt Tabellen aus, die sowohl die absoluten Erträge als auch die prozentuale Verbesserung gegenüber der flachen Anlage zeigen.
-
-* Technik: Nutzt Vektorisierung und Pre-Caching für maximale Rechengeschwindigkeit ohne for-Schleifen
+		* Auswertung: Berechnet Tageserträge (kWh) und Jahressummen.
+		* Ergebnis: Gibt Tabellen aus, die sowohl die absoluten Erträge als auch die prozentuale Verbesserung gegenüber der flachen Anlage zeigen.
+		* Technik: Nutzt Vektorisierung und Pre-Caching für maximale Rechengeschwindigkeit ohne for-Schleifen
 
 
 **Wie man es benutzt:**
