@@ -38,9 +38,9 @@ function [t_rise, t_set, day_length] = calcDayLength(doy, conf)
     
     half_day_duration = H_ss_deg / 15; % Halbe Taglaenge in Stunden
     
-    % Sonnenhoechststand um 12:00 Uhr
+    % Sonnenhoechststand um 12:00 Uhr angenommen für Integral
     t_set = 12 + half_day_duration;
     t_rise = 12 - half_day_duration;
-    
+
     day_length = t_set - t_rise;
 end
