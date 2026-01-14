@@ -16,7 +16,7 @@ classdef SolarLib
         rad2deg = 180/pi;
     
         % Breite in Radiant umrechnen
-        phi = 47.26 * (pi/180)
+        phi = 47.26 * (pi/180);
 
     end
 
@@ -104,7 +104,7 @@ classdef SolarLib
             
             % Berechnung Stundenwinkel H_ss (sunset)
             H_ss_rad = acos(cos_H_ss);
-            H_ss_deg = acos(cos_H_ss) * SolarLib.rad2deg %in Grad
+            H_ss_deg = acos(cos_H_ss) * SolarLib.rad2deg; %in Grad
             
             % 3. Umrechnung H in Uhrzeit t
             % H = 15 * (t - 12)  =>  t = H/15 + 12
@@ -255,11 +255,11 @@ classdef SolarLib
         function E = calculateEnergyFast(x, cache)
             if ~cache.valid, E = 0; return; end
             az_rad = x(1) * SolarLib.deg2rad;
-            tilt_rad = x(2) * Solarlib.deg2rad;
+            tilt_rad = x(2) * SolarLib.deg2rad;
             n_vec = [sin(tilt_rad)*cos(az_rad); sin(tilt_rad)*sin(az_rad); cos(tilt_rad)];
             cos_theta = n_vec' * cache.s_matrix;
             cos_theta(cos_theta < 0) = 0; 
-            E = trapz(cache.time, Solarlib.S0 * cos_theta);
+            E = trapz(cache.time, SolarLib.S0 * cos_theta);
         end
         
         
@@ -340,7 +340,7 @@ classdef SolarLib
 
 
         function out = getData(doy, time)
-            [s, ~, az_deg] = calcSunPosition(doy, time);
+            [s, ~, az_deg] = SolarLib.calcSunPosition(doy, time);
             out.s = s;
             out.az = az_deg * SolarLib.deg2rad; % Radiant für cos/sin
         end
@@ -351,14 +351,14 @@ classdef SolarLib
 
         function cache = createDayCache(doy)
             % Sonnenauf- und -untergang für Integration
-            [t_rise, t_set, ~] = calcDayLength(doy);
+            [t_rise, t_set, ~] = SolarLib.calcDayLength(doy);
             % Werte prüfen (Polarnacht)
             if t_set <= t_rise
                 cache.valid = false; return;
             end
             t = t_rise : 0.1 : t_set;
             % Sonnenposition für jeden Zeitschritt
-            data = arrayfun(@(time) getData(doy, time), t); 
+            data = arrayfun(@(time) SolarLib.getData(doy, time), t); 
             cache.valid = true;
             cache.time = t;
             % [data.s] wandelt Struct-Array in 3xN Matrix um für
