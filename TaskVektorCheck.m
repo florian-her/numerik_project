@@ -1,10 +1,9 @@
 clear; clc;
-conf = getSolarConfig();
 
 doy = 172;
 t = 12.0;
 
-[s_vec, alpha, alpha_Z] = calcSunPosition(doy, t, conf);
+[s_vec, alpha, alpha_Z] = SolarLib.calcSunPosition(doy, t);
 
 vektor_laenge = norm(s_vec);
 
