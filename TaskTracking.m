@@ -1,6 +1,5 @@
 clear; clc;
 % Laden der Configuration
-conf = getSolarConfig();
 
 fprintf('--- PV-Szenarien Vergleich: Flach vs. Optimal vs. Tracking ---\n\n');
 
@@ -28,10 +27,10 @@ end
 %% 2. DEFINITION DER 4 SZENARIEN
 % Function Handles um Parameter fest zu legen (später nurnoch cache als
 % input)
-calc_flat = @(cache) calculateEnergyFixed([180, 0], cache, conf);
-calc_opt_fixed = @(cache) calculateEnergyFixed([opt_azimut, opt_tilt], cache, conf);
-calc_track_1axis = @(cache) calculateEnergy1Axis(opt_tilt, cache, conf);
-calc_track_2axis = @(cache) calculateEnergy2Axis(cache, conf);
+calc_flat = @(cache) SolarLib.calculateEnergyFixed([180, 0], cache);
+calc_opt_fixed = @(cache) SolarLib.calculateEnergyFixed([opt_azimut, opt_tilt], cache);
+calc_track_1axis = @(cache) SolarLib.calculateEnergy1Axis(opt_tilt, cache);
+calc_track_2axis = @(cache) SolarLib.calculateEnergy2Axis(cache);
 
 
 %% 3. VERGLEICH AN DEN 4 STICHTAGEN
@@ -42,7 +41,7 @@ test_names = {'21. Maerz', '21. Juni', '21. Sept', '21. Dez'};
 fprintf('2. Berechne Stichtage... \n');
 
 % Hilfsfunktion für createDayCache mit config
-get_day_cache = @(doy) createDayCache(doy, conf);
+get_day_cache = @(doy) SolarLib.createDayCache(doy);
 % Sonnenstände für die vier tage im vorraus berechnen und als cell-Array
 % ausgibt
 days_cache = arrayfun(get_day_cache, test_days, 'UniformOutput', false);
@@ -101,87 +100,4 @@ fprintf('  1-Achsig:   +%.1f%%\n', (sum_1ax/base - 1)*100);
 fprintf('  2-Achsig:   +%.1f%%\n', (sum_2ax/base - 1)*100);
 
 
-%% --- LOKALE FUNKTIONEN ---
 
-function cache = createDayCache(doy, conf)
-    % Sonnenauf- und -untergang für Integration
-    [t_rise, t_set, ~] = calcDayLength(doy, conf);
-    % Werte prüfen (Polarnacht)
-    if t_set <= t_rise
-        cache.valid = false; return;
-    end
-    t = t_rise : 0.1 : t_set;
-    % Sonnenposition für jeden Zeitschritt
-    data = arrayfun(@(time) getData(doy, time, conf), t); 
-    cache.valid = true;
-    cache.time = t;
-    % [data.s] wandelt Struct-Array in 3xN Matrix um für
-    % Matrixmultiplikation (Hilfe von KI!)
-    cache.s_matrix = [data.s];       
-    cache.sun_az_rad = [data.az];    
-end
-
-% Wrapper-Funktion, CalcSunPosition Output in Struct 
-function out = getData(doy, time, conf)
-    [s, ~, az_deg] = calcSunPosition(doy, time, conf);
-    out.s = s;
-    out.az = az_deg * conf.deg2rad; % Radiant für cos/sin
-end
-
-% Berechnung für feste Module
-function E = calculateEnergyFixed(x, cache, conf)
-    if ~isfield(cache, 'valid') || ~cache.valid, E=0; return; end
-
-    az_rad = x(1) * conf.deg2rad;
-    tilt_rad = x(2) * conf.deg2rad;
-
-    % Normalvektor vom Panel berechnen (konstant für jeden Tag)
-    nz = cos(tilt_rad);
-    n_horiz = sin(tilt_rad);
-    n_vec = [n_horiz*cos(az_rad); n_horiz*sin(az_rad); nz];
-
-    % Vektorisierung: Skalarprodukt für jeden Zeitpunkt 
-    % ((1x3 Vektor)*(3xN Matrix) -> (1xN Vektor mit Cosinus)
-    cos_theta = n_vec' * cache.s_matrix;
-
-    % Ausblednen wenn Sonne von hinten scheint
-    cos_theta(cos_theta < 0) = 0; 
-
-    % Integrieren für Leistung gesammt
-    E = trapz(cache.time, conf.S0 * cos_theta);
-end
-
-function E = calculateEnergy1Axis(fixed_tilt_deg, cache, conf)
-    if ~isfield(cache, 'valid') || ~cache.valid, E=0; return; end
-
-    tilt_rad = fixed_tilt_deg * conf.deg2rad;
-    n_horiz = sin(tilt_rad);
-    nz = cos(tilt_rad);
-
-    %  Normalenvektor nicht konstant, 3xN matrix erstellen die Sonnen
-    %  Azimut folgt
-    nx_row = n_horiz * cos(cache.sun_az_rad);
-    ny_row = n_horiz * sin(cache.sun_az_rad);
-    % Z konstant aber auf Vektorlänge anpassen
-    nz_row = repmat(nz, 1, length(cache.time));
-
-    n_matrix = [nx_row; ny_row; nz_row];
-
-    % Skalarprodukt von Matrizenund Addiert für jeden Zeitschritt
-    cos_theta = sum(n_matrix .* cache.s_matrix, 1);
-
-    cos_theta(cos_theta < 0) = 0;
-
-    E = trapz(cache.time, conf.S0 * cos_theta);
-end
-
-% Berechnung für 2-Achsiges Tracking
-function E = calculateEnergy2Axis(cache, conf)
-    if ~isfield(cache, 'valid') || ~cache.valid, E=0; return; end
-
-    % Perfekte Ausrichtung: Winkel immer 0 -> Cosinus immer 1 
-    cos_theta = ones(1, length(cache.time));
-
-    % Integral immer S0*Tageslänge
-    E = trapz(cache.time, conf.S0 * cos_theta);
-end
