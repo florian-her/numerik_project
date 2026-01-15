@@ -4,10 +4,10 @@ Dieses Repository enthält die numerische Simulation zur Berechnung und Optimier
 
 ## AKTUELLE WICHTIGE KOMMENTARE ToDo!!!
 
-* TaskOptimierung-> Vergleich fixiert übers Jahr mit flach hinzufügen
-* TaskTracking-> auskommentieren (macht Simen)
+* SolarLib auskommentieren
+* Task Scripts auf neue Solarlib anpassen -> Laden der Daten in TaskTracking ändern
 * Strompreise einbinden, passende Aufgabe überlegen-> Wieviel Geld verdienen womit; optimale Fixierte Einstellung für maximales Geld; Optimale Nutzung, bei verkauf und eigennutzung(Werte für durchschnittsverbrauch raussuchen)
-* Dokumentation und README ausarbeiten
+* Dokumentation und README anpassen auf Solarlib Verwendung
 * Evtl. möglich: die gefragten 4 Tage auch zentral in die Config oä. speichern zum einfachen bearbeiten
 
 **Stand: Phase 1 (Modellierung & Grundlagen)**
