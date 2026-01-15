@@ -11,4 +11,4 @@ E_2axis = SolarLib.calculateEnergy2Axis(cache_sommer);
 fprintf('--- Ergebnisse für den 21. Juni (Innsbruck) ---\n');
 fprintf('Feste Ausrichtung (Süd, 30°): %.2f kWh/m²\n', E_fixed);
 fprintf('2-achsige Nachführung:        %.2f kWh/m²\n', E_2axis);
-fprintf('Gewinn durch Tracking:        %.1f %%\n', (E_2axis/E_fixed - 1)*100);
+fprintf('Gewinn durch Tracking:        %.1f %%\n', (E_2axis/E_fixed - 1)*100); 
