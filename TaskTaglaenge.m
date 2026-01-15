@@ -1,12 +1,11 @@
 set(0, 'DefaultFigureRenderer', 'painters');
 close all; clear; clc;
 
-conf = getSolarConfig();
 days = 1:365;
 lengths = zeros(1, 365);
 
 for doy = days
-    [~, ~, day_length] = calcDayLength(doy, conf); 
+    [~, ~, day_length] = SolarLib.calcDayLength(doy); 
     lengths(doy) = day_length;
 end
 
