@@ -35,7 +35,6 @@ classdef SolarLib
             %   doy: day of year
             %   panel_azimuth: Ausrichtung Panel
             %   panel_tilt: Neigung Panel
-            %   conf: Config-Struct
             %
             % OUTPUT:
             %   E_day: Tagesenergie in kWh
@@ -76,7 +75,6 @@ classdef SolarLib
             
             % INPUT:
             %   doy: Tag des Jahres
-            %   conf: Konfigurations-Struktur
         
             % OUTOUT:
             % t_rise: Uhrzeit Sonnenaufgang
@@ -132,8 +130,11 @@ classdef SolarLib
             % s_vec: Sonnenvektor 3x1 (aus calcSunPosition)
             % panel_azimuth_deg: Ausrichtung (0=Nord, 90=Ost, 180=Süd)
             % panel_tilt_deg: Neigung (0=flach, 90=vertikal)
-            % conf: Konfiguration-Struktur
-            
+            %
+            % OUTPUT:
+            % P: Leistung pro m^2
+            %
+            %
             % 1. Umrechnung in Radiant
             az_rad = panel_azimuth_deg * SolarLib.deg2rad;
             tilt_rad = panel_tilt_deg * SolarLib.deg2rad;
@@ -175,14 +176,15 @@ classdef SolarLib
         
         function [s_vec, alpha_deg, alpha_Z_deg] = calcSunPosition(doy, time_h)
             % CALCSUNPOSITION Berechnet Sonnenstand und Vektor nach Aufgaben-Formeln
-            % doy: Day of Year
-            % time_h: Uhrzeit in Stunden
-            % conf: Configuration-Struktur
+            %
+            % INPUT:
+            %   doy: Day of Year
+            %   time_h: Uhrzeit in Stunden
             
             % OUTPUT:
-            %   s_vec       - 3x1 Einheitsvektor zur Sonne [Nord; Ost; Oben]
-            %   alpha_deg   - Höhenwinkel in Grad
-            %   alpha_Z_deg - Azimutwinkel (Himmelsrichtung, 0=Nord, 90=Ost) in Grad
+            %   s_vec: 3x1 Einheitsvektor zur Sonne [Nord; Ost; Oben]
+            %   alpha_deg: Höhenwinkel in Grad
+            %   alpha_Z_deg: Azimutwinkel (Himmelsrichtung, 0=Nord, 90=Ost) in Grad
         
             %% 1. Deklination (delta)
             % Hinweis: Der Teil im sin() ist bereits Radiant durch 2*pi.
@@ -199,7 +201,8 @@ classdef SolarLib
             % phi ist Breitengrad des Standorts
             sin_alpha = sin(SolarLib.phi) * sin(delta) + cos(SolarLib.phi) * cos(delta) * cos(H);
             
-            % Auf gültigen Bereich begrenzen wegen numerischer Ungenauigkeiten
+            % Auf gültigen Bereich begrenzen wegen numerischer
+            % Ungenauigkeiten: Hinweis von KI
             sin_alpha = max(-1, min(1, sin_alpha));
             alpha = asin(sin_alpha); % Ergebnis in Radiant
             alpha_deg = alpha * SolarLib.rad2deg; % Ausgabe wieder in Grad
@@ -253,12 +256,38 @@ classdef SolarLib
         %%------------------------------
 
         function E = calculateEnergyFast(x, cache)
+            % CALCULATEENERGYFAST berechnet Energie schneller mit cache für
+            % Optimierungs aufgabe
+            %
+            % INPUT:
+            % x: Ausrichtungs und Neigungswinkel in Vektor
+            % cache: Struct mit gesammtem Tagesverlauf der Sonne
+            % (Zeitvektor und Sonnenvektoren in 3xN)
+            %
+            % OUTPUT:
+            % E: Tagesenergie in kWh
+
+            % Cache gültig?
             if ~cache.valid, E = 0; return; end
+
             az_rad = x(1) * SolarLib.deg2rad;
             tilt_rad = x(2) * SolarLib.deg2rad;
-            n_vec = [sin(tilt_rad)*cos(az_rad); sin(tilt_rad)*sin(az_rad); cos(tilt_rad)];
+
+            % Normalevektor des Panles in 3x1
+            n_vec = [sin(tilt_rad)*cos(az_rad);...
+                sin(tilt_rad)*sin(az_rad);...
+                cos(tilt_rad)];
+            
+            % Berechnung Vektorisiert:
+            % Transponierter Panel-Vektor mit gesamter Sonnenmatrix im
+            % cache
+            % (1x3) * (3xN) -> (1xN) mit cos(theta)
             cos_theta = n_vec' * cache.s_matrix;
+
+            % negative Werte für Sonne hinter Panel = 0
             cos_theta(cos_theta < 0) = 0; 
+
+            % Fläche unter Leistunngskurve mit Trapezregel
             E = trapz(cache.time, SolarLib.S0 * cos_theta);
         end
         
