@@ -1,4 +1,4 @@
-clear; clc;
+clear;
 options = optimset('Display', 'off');
 opts = detectImportOptions('Strompreis_2025.csv');
 data = readtable('Strompreis_2025.csv', opts);
@@ -23,6 +23,6 @@ fprintf('Starte Optimierung...\n');
 [x_opt, maxNegProfit] = fmincon(objective, x0, [], [], [], [], lb, ub, [], options);
 
 fprintf('\n--- Optimierungsergebnis ---\n');
-fprintf('Optimaler Azimut: %.2f° (0=N, 90=O, 180=S, 270=W)\n', x_opt(1));
-fprintf('Optimaler Tilt:   %.2f° (0=Flach, 90=Vertikal)\n', x_opt(2));
-fprintf('Maximaler Profit: %.2f Einheiten\n', -maxNegProfit);
+fprintf('Optimaler Azimut: %.2f°\n', x_opt(1));
+fprintf('Optimaler Tilt:   %.2f°\n', x_opt(2));
+fprintf('Maximaler Profit: %.2f Cent\n', -maxNegProfit);

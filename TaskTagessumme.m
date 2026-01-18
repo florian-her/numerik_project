@@ -1,4 +1,4 @@
-clear; clc;
+clear;
 
 test_days = [80, 172, 264, 355];
 test_names = {'21. Maerz', '21. Juni', '21. Sept', '21. Dez'};
