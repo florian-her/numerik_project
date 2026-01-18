@@ -2,13 +2,25 @@
 
 Dieses Repository enthält die numerische Simulation zur Berechnung und Optimierung der Energieausbeute einer PV-Anlage.
 
+## Schnellstart (How to Run)
+
+Das gesamte Projekt wird über ein zentrales Steuerungsskript ausgeführt, das alle Aufgaben der Reihe nach abarbeitet und die Ergebnisse in der Konsole sowie als Diagramme ausgibt.
+
+1. MATLAB starten.
+2. In das Verzeichnis navigieren.
+3. Folgenden Befehl eingeben:
+   ```matlab
+   run_project
+
+   
 ## AKTUELLE WICHTIGE KOMMENTARE ToDo!!!
 
-* SolarLib auskommentieren
-* Task Scripts auf neue Solarlib anpassen -> Laden der Daten in TaskTracking ändern
-* Strompreise einbinden, passende Aufgabe überlegen-> Wieviel Geld verdienen womit; optimale Fixierte Einstellung für maximales Geld; Optimale Nutzung, bei verkauf und eigennutzung(Werte für durchschnittsverbrauch raussuchen)
-* Dokumentation und README anpassen auf Solarlib Verwendung
+* Task... auskommentieren
+* Dokumentation und README anpassen (Inhaltlich prüfen!!!)
+* Namen zu Readme erneut hinzufügen
 * Evtl. möglich: die gefragten 4 Tage auch zentral in die Config oä. speichern zum einfachen bearbeiten
+* PowerPoint fertigstellen
+* 
 
 **Stand: Phase 1 (Modellierung & Grundlagen)**
 
@@ -22,103 +34,58 @@ Dieses Repository enthält die numerische Simulation zur Berechnung und Optimier
 
 ---
 
-## Vorgehensweise & Struktur
-
-Um Konflikte zu vermeiden und den Code sauber zu halten, habe ich die physikalischen Berechnungen in modulare Funktionen aufgeteilt. Das ermöglicht, die Optimierung (Phase 2 & 3) einfach aufzubauen, indem wir diese Funktionen in einer Schleife oder einem Optimierer aufrufen.
-
 ### Die Dateien (Phase 1)
 
-1. **`getSolarConfig.m` by Simen**
-   * Enthält alle **Konstanten** (Ort, Solarkonstante, Panel-Fläche).
-   * Hier werden zentrale Parameter geändert, keine Variablen im Code verteilen!
+**1. Die Bibliothek (SolarLib.m)**
 
-2. **`calcSunPosition.m` by Simen**
-   * Berechnet für einen Tag ($doy$) und eine Uhrzeit ($t$) den exakten **Sonnenvektor** $\vec{s}$.
-   * Berechnet zusätzlich Deklination $\delta$, Höhenwinkel $\alpha$ und Azimut $\alpha_Z$ gemäß den Formeln der Aufgabenstellung.
-   * *Besonderheit:* Behandelt die Fallunterscheidung beim Azimut (Vormittag/Nachmittag) automatisch.
+Anstatt viele kleine Dateien zu haben, nutzen wir eine statische Klasse als Bibliothek.
+* Enthält Konstanten: Standort (Innsbruck, 47.26° N), Solarkonstante S0​.
+* Enthält Methoden: calcSunPosition, calcDayLength, calcDailyEnergy.
+* Performance: Enthält die Caching-Logik (createDayCache), die Sonnenbahnen vorberechnet, um die Optimierung (fminsearch) um den Faktor 100x zu beschleunigen.
 
-3. **`calcDayLength.m` by Simen**
-   * Bestimmt Sonnenaufgang ($t_{rise}$) und -untergang ($t_{set}$) basierend auf der Bedingung $\alpha = 0$.
-   * Wichtig für die Integrationsgrenzen.
-   * *Kommentar:* Das funktioniert noch nicht richtig.
+**2. Die Aufgaben (Tasks)**
 
-4. **`calcPanelPower.m` by Simen**
-   * Berechnet die momentane Leistung in $kW$.
-   * Nutzt das Skalarprodukt $\vec{n} \cdot \vec{s}$ (Normalenvektor $\cdot$ Sonnenvektor), um den Projektionsfaktor zu bestimmen.
-   * Berücksichtigt, dass Leistung = 0, wenn die Sonne "hinter" dem Panel steht.
+**Jede Aufgabe aus der Angabe hat ein eigenes Skript:**
+	
+* TaskVektorCheck.m (Aufgabe 1)
+  * Prüft, ob der Sonnenvektor s mathematisch korrekt ein Einheitsvektor (Länge 1) ist.
+  * Validiert die Winkel α (Höhe) und αZ​ (Azimut).
+* TaskTaglaenge.m (Aufgabe 2)
+  * Berechnet den Sonnenauf- und -untergang für jeden Tag des Jahres.
+  * Erzeugt den Plot "Taglängen über das Jahr".
+* TaskTagessumme.m (Aufgabe 3a)
+  * Berechnet die Energie (kWh) für die geforderten Stichtage (21. März, Juni, Sept, Dez).
+  * Vergleicht Horizontal (0∘) vs. Vertikal Süd (90∘).
+* TaskJahressumme.m (Aufgabe 3b)
+  * Summiert die Energie über alle 365 Tage.
+  * Vergleich Horizontal vs. Vertikal über das ganze Jahr.
+* TaskOptimierung.m (Aufgabe 4)
+  * Nutzt fminsearch, um die perfekten Winkel (Azimut & Tilt) zu finden.
+  * Optimiert sowohl für einzelne Tage als auch für das gesamte Jahr.
+  * Speichert die Ergebnisse in results_opt.mat (Caching für Task 5).
+* TaskTracking.m (Aufgabe 5)
+  * Vergleicht 4 Szenarien:
+    * Flach (Horizontal)
+    * Optimal Fixiert (Jahres-Optimum)
+    * 1-Achsiges Tracking (Azimut nachgeführt)
+    * 2-Achsiges Tracking (Immer senkrecht zur Sonne)
+  * Berechnet die prozentualen Gewinne (Tracking vs. Flach UND Tracking vs. Optimal Fixiert).
 
-5. **`calcDailyEnergy.m` by Simen**
-   * Die Hauptfunktion für die Aufgaben "Tagessummen".
-   * Führt die **numerische Integration** (Trapezregel) der Leistung von Sonnenaufgang bis -untergang durch.
+**3. Bonus & Wirtschaftlichkeit**
+    * TaskProfit.m
+       * Lädt reale Strompreise aus Strompreis_2025.csv.
+       * Optimiert die Ausrichtung der Anlage nicht nach Energie (kWh), sondern nach Profit (€).
+       * Beantwortet die Frage: Lohnt es sich, die Anlage westlicher auszurichten, um die hohen Strompreise am Abend mitzunehmen?
+		
 
-6. **`test_solar_basic.m` by Simen**
-   * Dieses Skript führt automatisch folgende Checks durch:
-		* Konfigurations-Check: Wurden Ort und Breite korrekt geladen?
-    	* Vektor-Check: ist der Sonnenvektor $\vec{s}$ immer ein Einheitsvektor (Länge 1)?
-    	* Plausibilitäts-Check: Stimmen Taglängen und Sonnenhöhen für Sommer (21. Juni) und Winter (21. Dez) mit der Realität überein?
-    	* Integrations-Check: Liefert `calcDailyEnergy` realistische kWh-Werte (> 0)?
+**Features & Technische Highlights**
+* Vektorisierung: Anstatt for-Schleifen nutzen wir Matrix-Operationen (n_vec' * s_matrix). Das ermöglicht die Berechnung eines ganzen Jahres in Sekundenbruchteilen.
+* Caching: Sonnenbahnen sind deterministisch. SolarLib berechnet sie einmal und speichert sie wiederverwendbar ab.
+* Robustheit: Alle Skripte prüfen auf fehlende Dateien oder ungültige Eingaben.
 
-7. **`Taglaenge` by Florian**
-   * Dieses Skript visualisiert die saisonalen Schwankungen der Tageslänge für einen spezifischen Standort:
-		* Konfigurations-Initialisierung: Lädt die geografischen Parameter (z. B. für Innsbruck) über die Funktion getSolarConfig().
-    	* Jahresverlauf-Berechnung: Durchläuft alle 365 Tage des Jahres und berechnet mittels calcDayLength die jeweilige Tagesdauer.
-    	* Grafische Auswertung: Erstellt ein Diagramm, das die Änderung der Sonnenstunden über den Jahresverlauf (doy 1 bis 365) darstellt.
-    	* Plausibilitäts-Check: Gibt die exakte berechnete Tageslänge für den 21. Juni (Sommeranfang) zur Kontrolle im Command Window aus.
+---
 
-8. **`TaskVektorCheck` by Florian**
-   * Dieses Skript dient der mathematischen Überprüfung der berechneten Sonnengeometrie:
-		* Berechnung der Sonnenposition: Ermittelt den Sonnenvektor $\vec{s}$ und die Sonnenhöhe $\alpha$ für einen spezifischen Testzeitpunkt (Sommersonnenwende, 12:00 Uhr).
-		* Vektor-Validierung: Berechnet die mathematische Norm (Länge) des resultierenden Richtungsvektors mithilfe der Funktion norm(s_vec).
-		* Einheitsvektor-Check: Verifiziert, ob die Länge des Vektors exakt $1.0$ beträgt, um sicherzustellen, dass es sich um einen korrekten Einheitsvektor handelt.
-		* Ergebniskontrolle: Gibt die einzelnen Vektorkomponenten sowie die Sonnenhöhe im Command Window aus, um die Plausibilität der Berechnungen (Aufgabe 26) zu bestätigen.
-
-9. **`TaskTagesSumme` by Florian**
-   * Dieses Skript berechnet und vergleicht die täglichen Energieerträge für verschiedene Modulausrichtungen zu den astronomischen Eckpunkten des Jahres:
-		* Saisonale Analyse: Führt Berechnungen für die Tag-und-Nacht-Gleichen sowie die Sonnenwenden durch (21. März, Juni, September und Dezember).
-		* Vergleich von Neigungswinkeln: Berechnet die tägliche Energie mittels calcDailyEnergy sowohl für eine horizontale Fläche ($0^\circ$ Neigung) als auch für eine vertikale Südfassade ($90^\circ$ Neigung).
-		* Systematische Datenerfassung: Durchläuft die Testtage in einer Schleife und speichert die resultierenden Energiewerte strukturiert in einer Ergebnismatrix.
-		* Tabellarische Aufbereitung: Erzeugt eine übersichtliche MATLAB-table, um den Einfluss des jahreszeitlichen Sonnenstandes auf die Energieeffizienz der verschiedenen Montagearten direkt gegenüberzustellen.
-
-10. **`TaskJahressumme` by Florian**
-   * Dieses Skript führt eine Langzeitsimulation durch, um die energetische Gesamtbilanz eines ganzen Jahres zu ermitteln:
-	   * Ganzjahres-Simulation: Durchläuft in einer Schleife alle 365 Tage des Jahres, um die kumulierte Strahlungsenergie zu berechnen.
-	   * Kumulierte Energieerträge: Summiert die täglichen Ergebnisse der Funktion calcDailyEnergy getrennt für horizontale Flächen ($0^\circ$ Neigung) und vertikale Südfassaden ($90^\circ$ Neigung) auf.
-	   * Vergleichsanalyse: Berechnet das Verhältnis (Faktor) zwischen vertikalem und horizontalem Ertrag, um die Effizienz verschiedener Gebäudekonzeptionen zu bewerten.
-	   * Ergebnisausgabe: Präsentiert die Jahressummen in der Einheit $kWh/m^2$, was als Grundlage für wirtschaftliche Ertragsprognosen dient.
-
-11. **`TaskOptimierung` by Florian**
-   * Dieses Skript führt eine automatisierte Suche nach der energetisch idealen Ausrichtung der Solarpanels durch, um das Maximum der einfallenden Strahlungsenergie zu finden:
-		* Algorithmische Optimierung: Nutzt die MATLAB-Funktion fminsearch, um durch Minimierung der negierten Tagesenergie den optimalen Azimut- und Neigungswinkel zu identifizieren.
-  		* Stichtags- & Ganzjahresanalyse: Berechnet die ideale Ausrichtung sowohl für die vier spezifischen Tage der Sonnenwenden und Tag-und-Nacht-Gleichen als auch für den kumulierten Ertrag über das gesamte Jahr.
-		* Relativer Performance-Vergleich: Setzt die optimierten Ergebnisse in Relation zu einer horizontalen Referenzanlage ($0^\circ$ Neigung), um den prozentualen Verbesserungsfaktor zu quantifizieren.
-  		* Ergebnisausgabe: Präsentiert die berechneten Idealwinkel (Azimut und Tilt in $^\circ$) sowie die maximal erreichbare Energie in $kWh/m^2$ in einer übersichtlichen Tabelle.
-
-12. **`TaskVergleichKomplett` by Simen**
-	* Dieses Skript realisiert die Aufgaben zur nachgeführten Anlage und stellt alle Szenarien gegenüber. Vergleicht vier Montagearten:
-		* Horizontal (Flach).
-		* Optimal Fixiert (Nutzt die berechneten Winkel aus TaskOptimierung via .mat-Import).
-		* 1-Achsiges Tracking (Azimut folgt der Sonne, Neigung fixiert auf Jahres-Optimum).
-        * 2-Achsiges Tracking (Panel immer senkrecht zur Sonne, theoretisches Maximum).
-
-		* Auswertung: Berechnet Tageserträge (kWh) und Jahressummen.
-		* Ergebnis: Gibt Tabellen aus, die sowohl die absoluten Erträge als auch die prozentuale Verbesserung gegenüber der flachen Anlage zeigen.
-		* Technik: Nutzt Vektorisierung und Pre-Caching für maximale Rechengeschwindigkeit ohne for-Schleifen
-
-
-**Wie man es benutzt:**
-   * Einfach `test_solar_basics` in das MATLAB Command Window eingeben und Enter drücken. Wenn keine `[FEHLER]` oder `Warning` angezeigt werden, ist das Modell stabil.
-
-## Workplan & Nächste Schritte
-
-- [x] Phase 1: Physikalisches Modell & Hilfsfunktionen implementiert (`feature/solar-basics`).
-- [x] Phase 2: Berechnung der Szenarien aus der Aufgabe (Horizontale/Vertikale Anlage für März, Juni, Sept, Dez). 
-- [x] Phase 3: Diagramm der Taglängen erstellen.
-- [x] Phase 4: Optimierung (Finde optimale Winkel $\alpha, \beta$ für das Jahr). -> *Hierfür nutzen wir später `fminsearch` mit `calcDailyEnergy` als Zielfunktion.*
-
-## Git Workflow
-
-Bitte arbeitet nicht direkt auf `main`. Erstellt für neue Aufgaben einen eigenen Branch:
-`git checkout -b feature/euer-feature-name`
-
+Autoren: Simen & Florian 
+Zuletzt bearbeitet: 18.01.26 by Simen
 ## README zuletzt bearbeitet: 
 - Simen 09.01. 20:00
