@@ -298,6 +298,13 @@ classdef SolarLib
         %%--------------------------------
 
         function E = calculateEnergy2Axis(cache)
+            % CALCULATEENERGY2AXIS Berechnet den Ertrag einer 2-achsig nachgeführten Anlage
+            % INPUT:
+            %   cache: Struct mit Zeitvektor (cache.time) und Gültigkeit
+            %
+            % OUTPUT:
+            %   E: Maximal mögliche Tagesenergie [kWh] 
+            
             if ~isfield(cache, 'valid') || ~cache.valid, E=0; return; end
     
             % Perfekte Ausrichtung: Winkel immer 0 -> Cosinus immer 1 
@@ -312,8 +319,18 @@ classdef SolarLib
         %%--------------------------------
 
         function E = calculateEnergy1Axis(fixed_tilt_deg, cache)
+            % CALCULATEENERGY1AXIS Berechnet den Ertrag für 1-achsiges Tracking.
+            %
+            % INPUT:
+            %   fixed_tilt_deg: Der feste Neigungswinkel (Wird nicht nachgeführt)
+            %   cache: Vorberechnete Sonnendaten (Zeit, Sonnenvektoren, Azimut)
+            %
+            % OUTPUT:
+            %   E: Tagesenergie [kWh]
+            
             if ~isfield(cache, 'valid') || ~cache.valid, E=0; return; end
-        
+            
+            % Feste Geomterie des Panels
             tilt_rad = fixed_tilt_deg * SolarLib.deg2rad;
             n_horiz = sin(tilt_rad);
             nz = cos(tilt_rad);
@@ -327,9 +344,10 @@ classdef SolarLib
         
             n_matrix = [nx_row; ny_row; nz_row];
         
-            % Skalarprodukt von Matrizenund Addiert für jeden Zeitschritt
+            % Skalarprodukt von Matrizen und Addiert für jeden Zeitschritt
             cos_theta = sum(n_matrix .* cache.s_matrix, 1);
-        
+            
+            % Korrektur wenn Sonne hinter Panel
             cos_theta(cos_theta < 0) = 0;
         
             E = trapz(cache.time, SolarLib.S0 * cos_theta);
@@ -340,23 +358,36 @@ classdef SolarLib
         %%Funktion calculate Energy fixed 
         %%-------------------------------
 
-        % Berechnung für feste Module
         function E = calculateEnergyFixed(x, cache)
+            % CALCULATEENERGYFIXED Berechnet den Tagesertrag einer fest installierten Anlage.
+            %
+            % INPUT:
+            %   x: Optimierungsvektor [Azimut, Neigung] in Grad
+            %       x(1): Azimut (0=Nord, 180=Süd)
+            %       x(2): Neigung (0=Flach, 90=Wand)
+            %   cache: Vorberechnete Sonnendaten (Zeitvektor, s_matrix)
+            %
+            % OUTPUT:
+            %   E: Tagesenergie [kWh]
+
             if ~isfield(cache, 'valid') || ~cache.valid, E=0; return; end
-        
+            
+            % Feste Geometrie des Panels
             az_rad = x(1) * SolarLib.deg2rad;
             tilt_rad = x(2) * SolarLib.deg2rad;
         
             % Normalvektor vom Panel berechnen (konstant für jeden Tag)
             nz = cos(tilt_rad);
             n_horiz = sin(tilt_rad);
+
+            % Spaltenvektor
             n_vec = [n_horiz*cos(az_rad); n_horiz*sin(az_rad); nz];
         
             % Vektorisierung: Skalarprodukt für jeden Zeitpunkt 
             % ((1x3 Vektor)*(3xN Matrix) -> (1xN Vektor mit Cosinus)
             cos_theta = n_vec' * cache.s_matrix;
         
-            % Ausblednen wenn Sonne von hinten scheint
+            % Ausblednen wenn Sonne von hinten
             cos_theta(cos_theta < 0) = 0; 
         
             % Integrieren für Leistung gesammt
@@ -367,11 +398,23 @@ classdef SolarLib
         %%Funktion get Data
         %%-----------------
 
-
         function out = getData(doy, time)
+            % GETDATA Hilfsfunktion zur Datenaufbereitung für das Caching.
+            % INPUT:
+            %   doy: day of year
+            %   time: Uhrzeit (dezimal)
+            %
+            % OUTPUT:
+            %   out: Struktur mit Feldern:
+            %       .s:  Sonnenvektor (3x1)
+            %       .az: Azimut in Radiant (für Matrix-Rotationen)
+            
+            % Sonnenstand berechnen, höhenwinkel in s enthalten
             [s, ~, az_deg] = SolarLib.calcSunPosition(doy, time);
+            % In Struct
             out.s = s;
-            out.az = az_deg * SolarLib.deg2rad; % Radiant für cos/sin
+
+            out.az = az_deg * SolarLib.deg2rad; % Radiant
         end
         
         %%-------------------------
@@ -379,19 +422,38 @@ classdef SolarLib
         %%-------------------------
 
         function cache = createDayCache(doy)
-            % Sonnenauf- und -untergang für Integration
+            % CREATEDAYCACHE Berechnet alle Sonnenpositionen für einen Tag vor.
+            %
+            % INPUT:
+            %   doy: day of year
+            %
+            % OUTPUT:
+            %   cache: Struktur mit:
+            %           .valid (bool): Tag gültig?
+            %           .time (1xN): Zeitvektor
+            %           .s_matrix (3xN): Alle Sonnenvektoren als Matrix
+            %           .sun_az_rad (1xN): Alle Azimute für Tracking
+
+            % Sonnen auf- und untergang
             [t_rise, t_set, ~] = SolarLib.calcDayLength(doy);
+
             % Werte prüfen (Polarnacht)
             if t_set <= t_rise
                 cache.valid = false; return;
             end
+
+            % Zeitvektor in dt = 0.1h
             t = t_rise : 0.1 : t_set;
-            % Sonnenposition für jeden Zeitschritt
+
+            % Sonnenposition für jeden Zeitschritt in Struct-Array 
+            % mit .s und .az
             data = arrayfun(@(time) SolarLib.getData(doy, time), t); 
             cache.valid = true;
             cache.time = t;
+
             % [data.s] wandelt Struct-Array in 3xN Matrix um für
             % Matrixmultiplikation (Hilfe von KI!)
+            % 100 (3x1) zu (3x100)
             cache.s_matrix = [data.s];       
             cache.sun_az_rad = [data.az];    
         end
