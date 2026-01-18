@@ -93,11 +93,15 @@ T_Year = table({'Gesamtjahr'}, sum_flat, sum_fixed, sum_1ax, sum_2ax, ...
 disp(T_Year);
 
 base = sum_flat;
-% Prozentuale verbesserung
+% Prozentuale verbesserung vs. Flach
 fprintf('Verbesserung vs. Flach:\n');
 fprintf('  Opt. Fest:  +%.1f%%\n', (sum_fixed/base - 1)*100);
 fprintf('  1-Achsig:   +%.1f%%\n', (sum_1ax/base - 1)*100);
 fprintf('  2-Achsig:   +%.1f%%\n', (sum_2ax/base - 1)*100);
 
+% Prozentuale Verbesserung vs. OPTIMAL FEST (Verlangt in Aufgabe)
+fprintf('\n Verbesserung vs. optimal Fixiert:\n');
+fprintf('  1-Achsig: +%.1f%%\n', (sum_1ax/sum_fixed - 1)*100);
+fprintf('  2-Achsig: +%.1f%%\n', (sum_2ax/sum_fixed - 1)*100);
 
 
