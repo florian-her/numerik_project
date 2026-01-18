@@ -1,7 +1,7 @@
 %% TEST-SKRIPT für Solar-Projekt (Phase 1)
 % Dieses Skript prüft, ob die Basisfunktionen laufen und sinnvolle Werte liefern.
 
-clc; clear;
+clear;
 fprintf('Startet Tests für Solar-Basics...\n\n');
 
 %% 1. Test: Konfiguration laden

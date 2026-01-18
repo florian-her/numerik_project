@@ -1,4 +1,4 @@
-clear; clc;
+clear;
 % Laden der Configuration
 
 fprintf('--- PV-Szenarien Vergleich: Flach vs. Optimal vs. Tracking ---\n\n');

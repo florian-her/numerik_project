@@ -1,17 +1,17 @@
 
 %%Standorteinstellungen werden geladen, 4 Testtage werden def. , options
 %%für optimieren -> sauberer Terminal 
-clear; clc;
+clear;
 test_days = [80, 172, 264, 355];
 test_names = {'21. Maerz', '21. Juni', '21. Sept', '21. Dez'};
 options = optimset('Display', 'off');
 
 fprintf('--- Optimierung der Ausrichtung (Innsbruck) ---\n\n');
 
-%%get_day_cache: Berechnet Sonnenpositionen für einen Tag und speichert sie
-%%in dem Chache, aus calc Day lenght sonneruntergang, fast_energy_calc: Berechnet Tagesenergie für einen
-%%bestimmten Winkel, aus Azimut und Neigung -> Vektor erstellen, Vergleicht
-%%dann Panel Vektor mit Sonnenvektor
+% get_day_cache: Berechnet Sonnenpositionen für einen Tag und speichert sie
+% in dem Chache, aus calc Day lenght sonneruntergang, fast_energy_calc: Berechnet Tagesenergie für einen
+% bestimmten Winkel, aus Azimut und Neigung -> Vektor erstellen, Vergleicht
+% dann Panel Vektor mit Sonnenvektor
 get_day_cache = @(doy) SolarLib.createDayCache(doy);
 fast_energy_calc = @(x, cache) SolarLib.calculateEnergyFast(x, cache);
 

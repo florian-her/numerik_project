@@ -1,3 +1,5 @@
+clear;
+
 % 1. Cache für einen Sommertag (Tag 172 = 21. Juni) erstellen
 cache_sommer = SolarLib.createDayCache(172);
 

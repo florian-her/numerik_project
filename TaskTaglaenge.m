@@ -1,5 +1,6 @@
+clear;
+
 set(0, 'DefaultFigureRenderer', 'painters');
-close all; clear; clc;
 
 days = 1:365;
 lengths = zeros(1, 365);
