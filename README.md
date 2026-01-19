@@ -216,7 +216,7 @@ Dies reduziert die trigonometrische Gleichung auf drei simple Multiplikationen u
 
 ---
 
-Autoren: Simen Cherubin, Florian Herzog & _______________
+Autoren: Simen Cherubin, Florian Herzog & Artur Surberg
 ## README zuletzt bearbeitet: 
 - Simen 19.01.
 
