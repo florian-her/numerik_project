@@ -224,4 +224,4 @@ Autoren: Simen Cherubin, Florian Herzog & Artur Surberg
 * README layout mit KI erstellt
 * Teilweise Kommentare mit KI korrigiert
 * Inhaltlicher Einfluss explizit im Code und README erwähnt
-* Der Contributor namens Aider Chat Bot war bei mir (Florian Herzog) von einem privaten Projekt noch aktiv und hat ohne bestätigung die Datei bearbeitet, commitet und gepusht. Dieser hatte keinen relevanten Einfluss auf das Projekt.
+* Der Contributor namens Aider Chat Bot war bei mir (Florian Herzog) von einem privaten Projekt noch aktiv und hat ohne bestätigung die Datei bearbeitet, commitet und gepusht. Dieser hatte keinen relevanten Einfluss auf das Projekt. (siehe: https://github.com/florian-her/numerik_project/graphs/contributors)
