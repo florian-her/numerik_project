@@ -2,15 +2,14 @@ clear;
 
 test_days = [80, 172, 264, 355];
 test_names = {'21. Maerz', '21. Juni', '21. Sept', '21. Dez'};
+% Ergebnis Array erstellen
 results = zeros(length(test_days), 2); 
 
-
+% geforderte Tage durchgehen und berechnen
 for i = 1:length(test_days)
     doy = test_days(i);
     
-   
     results(i, 1) = SolarLib.calcDailyEnergy(doy, 180, 0); 
-    
     
     results(i, 2) = SolarLib.calcDailyEnergy(doy, 180, 90);
 end

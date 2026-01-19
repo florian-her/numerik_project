@@ -3,10 +3,10 @@ clear;
 % Alle Tage des Jahres als Vektor definieren
 days = 1:365;
 
-% Jahressumme Horizontal: Berechne für jeden Tag und summiere [cite: 31]
+% Jahressumme Horizontal: Berechne für jeden Tag und summiere 
 E_horiz_total = sum(arrayfun(@(d) SolarLib.calcDailyEnergy(d, 180, 0), days));
 
-% Jahressumme Vertikal Süd: [cite: 35]
+% Jahressumme Vertikal Süd: 
 E_vert_total = sum(arrayfun(@(d) SolarLib.calcDailyEnergy(d, 180, 90), days));
 
 fprintf('--- JAHRESSUMMEN ---\n');
