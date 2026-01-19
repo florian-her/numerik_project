@@ -155,6 +155,27 @@ Die Physik wird korrekt abgebildet; nachts ist die Leistung exakt 0.
 ### 5. Koordinatensystem-Konfusion
 * **Problem:** In der Mathematik ist $0^\circ$ meist "Rechts" (Ost) und es wird gegen den Uhrzeigersinn gedreht. In der Navigation hier ist $0^\circ$ "Oben" (Nord) und es wird im Uhrzeigersinn gedreht.
 * **Lösung:** Strikte Definition in der Dokumentation und Umrechnung innerhalb der `SolarLib`. Wir nutzen das Navigations-System ($x$=Nord), wie in der Angabe gefordert.
+
+## Mathematische Umformungen
+
+**Tageslänge**
+
+Die Berechnung basiert auf der Formel für den Höhenwinkel aus der Aufgabenstellung.
+
+**1. Ansatz: Sonnenuntergang ($\alpha = 0$)**
+
+Wir setzen die Sonnenhöhe $\alpha$ in der Grundgleichung auf 0:
+
+$$0 = \sin(\delta) \cdot \sin(\phi) + \cos(\delta) \cdot \cos(\phi) \cdot \cos(\omega)$$
+
+**2. Umformung**
+
+Wir lösen nach dem Stundenwinkel $\omega$ auf und nutzen die Beziehung $\frac{\sin}{\cos} = \tan$:
+
+$$\cos(\omega) = \frac{-\sin(\delta) \cdot \sin(\phi)}{\cos(\delta) \cdot \cos(\phi)} = -\tan(\phi) \cdot \tan(\delta)$$
+
+Dies liefert den Stundenwinkel $\omega_s$, aus dem sich direkt die Tageslänge ableiten lässt.
+
 ---
 
 Autoren: Simen Cherubin, Florian Herzog & _______________
