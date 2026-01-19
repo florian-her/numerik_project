@@ -88,7 +88,7 @@ classdef SolarLib
             delta = delta_deg * SolarLib.deg2rad; % In Radiant
             
             % 2. Bedingung für Sonnenaufgang: Höhenwinkel alpha = 0
-            
+            % Formelherleitung aus Höhenwinkelformel
             cos_H_ss = -tan(SolarLib.phi) * tan(delta);
             
             % Prüfung auf Polartag/nacht
