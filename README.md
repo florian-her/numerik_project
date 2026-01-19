@@ -158,7 +158,7 @@ Die Physik wird korrekt abgebildet; nachts ist die Leistung exakt 0.
 
 ## Mathematische Umformungen
 
-**Tageslänge**
+### **Tageslänge**
 
 Die Berechnung basiert auf der Formel für den Höhenwinkel aus der Aufgabenstellung.
 
@@ -175,6 +175,44 @@ Wir lösen nach dem Stundenwinkel $\omega$ auf und nutzen die Beziehung $\frac{\
 $$\cos(\omega) = \frac{-\sin(\delta) \cdot \sin(\phi)}{\cos(\delta) \cdot \cos(\phi)} = -\tan(\phi) \cdot \tan(\delta)$$
 
 Dies liefert den Stundenwinkel $\omega_s$, aus dem sich direkt die Tageslänge ableiten lässt.
+
+### **Sonnenvektor**
+
+Kugelkoordinaten (Azimut $\gamma_s$, Höhe $\alpha$) in einen kartesischen Vektor $\vec{s}$
+
+**1. Definition des Koordinatensystems**
+lokales Navigations-System:
+* $x$: Norden ($0^\circ$ Azimut)
+* $y$: Osten ($90^\circ$ Azimut)
+* $z$: Oben (Zenit)
+
+**2. Projektion**
+Der Sonnenvektor hat die Länge 1.
+* Die vertikale Komponente $z$ ergibt sich direkt aus dem Sinus der Höhe.
+* Die horizontale Komponente ist $\cos(\alpha)$. Diese wird mittels Sinus und Kosinus auf Nord ($x$) und Ost ($y$) aufgeteilt.
+
+**3. Die Formeln im Code**
+Da der Azimut $\gamma_s$ von Norden im Uhrzeigersinn gemessen wird, ergibt sich:
+
+$$
+\vec{s} = \begin{pmatrix} x \\ y \\ z \end{pmatrix} = \begin{pmatrix} \cos(\alpha) \cdot \cos(\gamma_s) \\ \cos(\alpha) \cdot \sin(\gamma_s) \\ \sin(\alpha) \end{pmatrix}
+$$
+
+### **Einfallswinkel**
+
+Der Einfallswinkel $\theta$ wird über sphärische Trigonometrie berechnet:
+
+$$\cos(\theta) = \sin(\alpha)\cos(\beta) + \cos(\alpha)\sin(\beta)\cos(\gamma_s - \gamma_p)$$
+
+(mit Panelneigung $\beta$ und Panelazimut $\gamma_p$)
+
+**Optimierung im Code:**
+
+Statt dieser rechenintensiven Formel wird die Vektoralgebra genutzt. Das Skalarprodukt der Einheitsvektoren liefert direkt den Kosinus des Winkels:
+
+$$\cos(\theta) = \vec{n} \cdot \vec{s}$$
+
+Dies reduziert die trigonometrische Gleichung auf drei simple Multiplikationen und Additionen ($n_x s_x + n_y s_y + n_z s_z$) und verkürzt die Laufzeit.
 
 ---
 
