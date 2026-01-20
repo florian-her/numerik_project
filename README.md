@@ -13,24 +13,12 @@ Das gesamte Projekt wird über ein zentrales Steuerungsskript ausgeführt, das a
    run_project
 
    
-## AKTUELLE WICHTIGE KOMMENTARE ToDo!!!
-
-* Task... auskommentieren
-* Dokumentation und README Inhaltlich prüfen!!!
-* PowerPoint fertigstellen
-
-** aktueller Stand:
-
-* **Aktueller Branch:** `feature/readme`
-* **Koordinatensystem:** Wir nutzen ein rechtshändiges System:
-  * $x$ = Nord ($0^\circ$)
-  * $y$ = Ost ($90^\circ$)
-  * $z$ = Zenit (Oben)
-  * Dies entspricht der Azimut-Definition der Aufgabe ($0^\circ$ = Nord).
+## Aktuelle Anmerkungen
+* Vereinzelt sind Kommentare noch veraltet, da sie vor zusammenschluss der Funktionen geschrieben wurden (hinweise auf config)
 
 ---
 
-### Die Dateien (Phase 1)
+### Die Dateien
 
 ### 1. Die Bibliothek (`SolarLib.m`) - Das Kernmodul
 
@@ -67,7 +55,7 @@ Die Library bietet spezialisierte Methoden für verschiedene Montagesysteme:
 * **`calculateEnergy2Axis`**: Für ideales Tracking ($\vec{n}$ ist parallel zu $\vec{s}$ $\rightarrow$ $P = S_{max}$). *by Simen*
 
 #### D. Numerik & Performance (Caching)
-Um die Optimierung (`fminsearch`) effizient zu gestalten, wird **Vektorisierung** und **Caching** eingesetzt.
+* Um die Optimierung (`fminsearch`) effizient zu gestalten, wird **Vektorisierung** und **Caching** eingesetzt.
     * Berechnet die Sonnenpositionen für einen gesamten Tag in 0.1h-Schritten im Voraus.
     * Speichert die Vektoren in einer Matrix (`s_matrix`), statt sie in jeder Iteration der Optimierung neu zu berechnen.
 * **`calculateEnergyFast`**: *by Simen*
