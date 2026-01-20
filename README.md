@@ -1,6 +1,6 @@
 # Numerik Projekt: Optimierung einer Photovoltaikanlage
 
-Dieses Repository enthält die numerische Simulation zur Berechnung und Optimierung der Energieausbeute einer PV-Anlage.
+Dieses Repository enthält die numerische Simulation zur Berechnung und Optimierung der Ausrichtung einer PV-Anlage.
 
 ## Schnellstart (How to Run)
 
@@ -14,7 +14,7 @@ Das gesamte Projekt wird über ein zentrales Steuerungsskript ausgeführt, das a
 
    
 ## Aktuelle Anmerkungen
-* Vereinzelt sind Kommentare noch veraltet, da sie vor zusammenschluss der Funktionen geschrieben wurden (hinweise auf config)
+* Vereinzelt sind Kommentare noch veraltet, da sie vor zusammenschluss der Funktionen geschrieben wurden (Hinweise auf config)
 
 ---
 
@@ -55,7 +55,7 @@ Die Library bietet spezialisierte Methoden für verschiedene Montagesysteme:
 * **`calculateEnergy2Axis`**: Für ideales Tracking ($\vec{n}$ ist parallel zu $\vec{s}$ $\rightarrow$ $P = S_{max}$). *by Simen*
 
 #### D. Numerik & Performance (Caching)
-* Um die Optimierung (`fminsearch`) effizient zu gestalten, wird **Vektorisierung** und **Caching** eingesetzt.
+* Um die Optimierung (`fminsearch`) effizient zu gestalten, wird **Vektorisierung** und **Caching** eingesetzt. (Caching Ansatz von KI)
     * Berechnet die Sonnenpositionen für einen gesamten Tag in 0.1h-Schritten im Voraus.
     * Speichert die Vektoren in einer Matrix (`s_matrix`), statt sie in jeder Iteration der Optimierung neu zu berechnen.
 * **`calculateEnergyFast`**: *by Simen*
@@ -83,7 +83,12 @@ Die Library bietet spezialisierte Methoden für verschiedene Montagesysteme:
 * TaskOptimierung.m (Aufgabe 4) *by Simen*
   * Nutzt fminsearch, um die perfekten Winkel (Azimut & Tilt) zu finden.
   * Optimiert sowohl für einzelne Tage als auch für das gesamte Jahr.
-  * Speichert die Ergebnisse in results_opt.mat (Caching für Task 5).
+  * Nutzt Caches für schnelle Laufzeit (Ansatz von KI!)
+  * Speichert die Ergebnisse in results_opt.mat für Aufgabe 5.
+  * Anmerkung:
+  	* 'komische' Werte (opt_tilt für 21. Juni: -3,94°) für Ausrichtung im Sommer bei hohem Sonnenstand sind auf Numerische abweichungen zurückzuführen
+  	* Panel liegt so flach, dass fminsearch kein Eindeutiges Minimum findet, da die Winkel in einem kleinen Rahmen nur einen
+    	sehr geringen Einfluss auf den Ertrag haben
 * TaskTracking.m (Aufgabe 5) *by Simen*
   * Vergleicht 4 Szenarien:
     * Flach (Horizontal)
