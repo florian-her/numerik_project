@@ -44,7 +44,8 @@ fprintf('\nPreCaching für das gesamte Jahr (365 Tage)... ');
 
 
 % Sonnenverlauf für jeden Tag des Jahres berechnen und in cache speichern
-year_cache = arrayfun(get_day_cache, 1:365, 'UniformOutput', false); % Wichtig: Uniformoutput false -> Unterschiedliche Tageslängen
+% Wichtig: Uniformoutput false -> Unterschiedliche Tageslängen
+year_cache = arrayfun(get_day_cache, 1:365, 'UniformOutput', false); 
 fprintf('Fertig.\n');
 
 % Handle zur berechnung Der Summe des Jahresertrags für Ausrichtung x mit
